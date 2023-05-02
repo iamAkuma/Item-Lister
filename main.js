@@ -72,6 +72,12 @@ var itemList = document.getElementById('items');
 //Form submit event
 form.addEventListener('submit', addItem);
 
+//Delete event listen
+itemList.addEventListener('click', removeItem);
+
+//Filter EVENT
+filter.addEventListener('keyup', filterItems);
+
 //Add Items
 function addItem(e){
     e.preventDefault();
@@ -85,6 +91,46 @@ function addItem(e){
      li.className = 'list-group-item';
      //Add textnode with input value
      li.appendChild(document.createTextNode(newItem));
+     
+     //Create del button element
+     var deleteBtn = document.createElement('button');
+     deleteBtn.className = 'btn btn-danger btn-sm float-right delete';
+
+     //Append text node
+     deleteBtn.appendChild(document.createTextNode('X'));
+
+     //Append button to li
+     li.appendChild(deleteBtn);
+
+     //Append li to list
      itemList.appendChild(li);
-     console.log(li);
+
 }
+//Remove Item
+function removeItem(e){
+   if(e.target.classList.contains('delete')){
+    if(confirm('Are you sure about that?')){
+        var li = e.target.parentElement;
+        itemList.removeChild(li);
+    }
+    console.log(1);
+   }
+
+ }
+
+ //Filter Items
+ function filterItems(e){
+    //convert to lowercase
+    var text = e.target.value.toLowerCase();
+    //Get li haru
+    var items = itemList.getElementsByTagName('li');
+    //Convert to an array
+    Array.from(items).forEach(function(item){
+    var itemName = item.firstChild.textContent;
+    if(itemName.toLowerCase().indexOf(text)!= -1){
+    item.style.display = 'block';
+    } else{
+        item.style.display = 'none';
+    }
+    });
+ }
